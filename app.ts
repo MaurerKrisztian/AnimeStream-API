@@ -21,6 +21,7 @@ import {Fixtures} from "./src/fixture/Fixtures";
 import config from 'config'
 import mongoose from 'mongoose'
 import { AnimeApiController } from "./src/controller/AnimeApiContoller";
+import { OtherApiController } from "./src/controller/OtherAnimeApiController";
 const jwt = require('jsonwebtoken')
 require('dotenv/config')
 
@@ -132,7 +133,7 @@ useExpressServer(app, {
         credentials: true
     },
     classTransformer: true,
-    controllers: [AnimeApiController,ProfileApiController, UserApiController, LoginApiController]
+    controllers: [OtherApiController, AnimeApiController,ProfileApiController, UserApiController, LoginApiController]
 });
 
 
