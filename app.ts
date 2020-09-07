@@ -128,7 +128,7 @@ useExpressServer(app, {
         undefinedResultCode: 204,
     },
     cors: {
-        origin: ['localhost:3000', 'http://localhost:4000','http://localhost:4200'],
+        origin: ['localhost:3000', 'http://localhost:4000','http://localhost:4200', 'https://animestream-2c543.web.app'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true
     },
