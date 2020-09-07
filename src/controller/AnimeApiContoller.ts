@@ -18,6 +18,13 @@ import { Request } from "express";
 @Controller()
 export class AnimeApiController {
 
+    
+    @Get("/api/echo")
+    //@Authorized("user")
+    async hello(@Req() req: any, @Res() res: any) {
+     
+        return "echo"
+    }
    
 
     @Get("/api/anime")

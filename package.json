@@ -2,7 +2,7 @@
   "name": "simple-rest-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.ts",
   "scripts": {
     "start": "ts-node-dev app.ts",
     "test": "mocha"
