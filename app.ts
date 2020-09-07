@@ -31,7 +31,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const DB_URI = process.env.DB_CONNECTION;
-const PORT = config.get("App.server.port") || 3000;
+const PORT = process.env.PORT || config.get("App.server.port");
 
 app.use(cookieParser());
 app.use(express.static('/public'));
