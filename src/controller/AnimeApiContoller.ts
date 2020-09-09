@@ -29,7 +29,7 @@ export class AnimeApiController {
 
     @Get("/api/anime")
     //@Authorized("user")
-    async getAnimeById(@Req() req: any, @Res() res: any) {
+    async getAnimes(@Req() req: any, @Res() res: any) {
         const profiles = await AnimeModel.find(req.query);
 
         //404
@@ -41,6 +41,24 @@ export class AnimeApiController {
         }
 
         return JSON.parse(JSON.stringify(profiles))
+    }
+
+    @Get("/api/anime/:id")
+    //@Authorized("user")
+    async getAnimeById(@Param("id") id: string, @Res() res: any) {
+        const anime = await AnimeModel.find(
+            {_id: id}
+        );
+
+        //404
+        if (anime[0] == undefined) {
+            res.status(404);
+            return {
+                message: "Profile Not found"
+            }
+        }
+
+        return JSON.parse(JSON.stringify(anime))
     }
 
     
