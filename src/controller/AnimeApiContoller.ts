@@ -100,16 +100,15 @@ export class AnimeApiController {
 
     @Post('/api/anime')
     //@Authorized("admin")
-    async createUser(@Body({
+    async createAnime(@Body({
             validate: true
         }) anime: AnimeDoc,
         @Req() req: Request, @Res() res: any) {
+            console.log(anime);
 
-        const newAnime = new AnimeModel({
-            title: anime.title,
-            description: anime.description,
-            imageLink: anime.imageLink
-        });
+        const newAnime = new AnimeModel(
+            anime
+        );
 
 
         const savedAnime = await newAnime.save()
