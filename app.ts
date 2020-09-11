@@ -22,6 +22,8 @@ import config from 'config'
 import mongoose from 'mongoose'
 import { AnimeApiController } from "./src/controller/AnimeApiContoller";
 import { OtherApiController } from "./src/controller/OtherAnimeApiController";
+import { EpisodeModel } from "./src/db/models/episodes";
+import { EpisodeApiController } from "./src/controller/EpisodeApiController";
 const jwt = require('jsonwebtoken')
 require('dotenv/config')
 
@@ -133,7 +135,7 @@ useExpressServer(app, {
         credentials: true
     },
     classTransformer: true,
-    controllers: [OtherApiController, AnimeApiController,ProfileApiController, UserApiController, LoginApiController]
+    controllers: [OtherApiController, AnimeApiController,ProfileApiController, UserApiController, LoginApiController, EpisodeApiController]
 });
 
 

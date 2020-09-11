@@ -12,84 +12,76 @@ import {
     Patch
 } from "routing-controllers";
 
-import {AnimeDoc, AnimeModel} from "../db/models/anime"
+import {EpisodeDoc, EpisodeModel} from "../db/models/episodes"
 import { Request } from "express";
-import { EpisodeDoc, EpisodeModel } from "../db/models/episodes";
 
 @Controller()
-export class AnimeApiController {
+export class EpisodeApiController {
 
-    
-    @Get("/api/echo")
-    //@Authorized("user")
-    async hello(@Req() req: any, @Res() res: any) {
-     
-        return "echo"
-    }
    
 
-    @Get("/api/anime")
+    @Get("/api/episode")
     //@Authorized("user")
-    async getAnimes(@Req() req: any, @Res() res: any) {
-        const profiles = await AnimeModel.find(req.query);
+    async getEpisode(@Req() req: any, @Res() res: any) {
+        const episode = await EpisodeModel.find(req.query);
 
         //404
-        if (profiles[0] == undefined) {
+        if (episode[0] == undefined) {
             res.status(404);
             return {
-                message: "Profile Not found"
+                message: "Episode Not found"
             }
         }
 
-        return JSON.parse(JSON.stringify(profiles))
+        return JSON.parse(JSON.stringify(episode))
     }
 
-    @Get("/api/anime/:id")
+    @Get("/api/episode/:id")
     //@Authorized("user")
     async getAnimeById(@Param("id") id: string, @Res() res: any) {
-        const anime = await AnimeModel.find(
+        const episode = await EpisodeModel.find(
             {_id: id}
         );
 
         //404
-        if (anime[0] == undefined) {
+        if (episode[0] == undefined) {
             res.status(404);
             return {
-                message: "Profile Not found"
+                message: "Episode Not found"
             }
         }
 
-        return JSON.parse(JSON.stringify(anime))
+        return JSON.parse(JSON.stringify(episode))
     }
 
     
-    @Delete("/api/anime/:id")
+    @Delete("/api/episode/:id")
     //@Authorized("admin")
     async deleteById(@Param("id") id: string, @Res() res: any) {
 
-        const removedProfile = await AnimeModel.remove({
+        const removedEpisode = await EpisodeModel.remove({
             _id: id
         });
 
         //404
-        if (removedProfile == undefined) {
+        if (removedEpisode == undefined) {
             res.status(404);
             return {
-                message: "Anime Not found"
+                message: "Episode Not found"
             }
         }
 
         return JSON.stringify({
-            message: "Anime is removed",
-            profile: removedProfile
+            message: "Episode is removed",
+            episode: removedEpisode
         })
     }
 
-    @Patch("/api/anime/:id")
+    @Patch("/api/episode/:id")
     //@Authorized("admin")
     async update(@Body() body: any, @Param("id") id: string) {
 
-        const res = await AnimeModel.update({
+        const res = await EpisodeModel.update({
             _id: id
         }, {
             $set: body
@@ -99,20 +91,20 @@ export class AnimeApiController {
     }
 
 
-    @Post('/api/anime')
+    @Post('/api/episode')
     //@Authorized("admin")
     async createAnime(@Body({
             validate: true
-        }) anime: AnimeDoc,
+        }) episode: EpisodeDoc,
         @Req() req: Request, @Res() res: any) {
-            console.log(anime);
+            console.log(episode);
 
-        const newAnime = new AnimeModel(
-            anime
+        const newAnime = new EpisodeModel(
+            episode
         );
 
 
-        const savedAnime = await newAnime.save()
+        const savedEpisode = await newAnime.save()
             .then((data: any) => {
 
             })
@@ -121,9 +113,8 @@ export class AnimeApiController {
             });
 
         return {
-            message: "Anime saved."
+            message: "episode saved."
         };
     }
-
 
 }

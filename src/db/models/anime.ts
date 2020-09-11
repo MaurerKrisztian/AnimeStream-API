@@ -3,6 +3,18 @@ export {};
 import {createSchema, ExtractDoc, Type, typedModel} from 'ts-mongoose';
 
 const animeSchema = createSchema({
+        title: Type.string({ required: false }), //pl dragon ball super
+        description:Type.string({require: true}),
+        imageLink:Type.string({require: true}),
+})
+
+export const AnimeModel = typedModel('anime', animeSchema);
+export type AnimeDoc = ExtractDoc<typeof animeSchema>;
+
+/*
+
+
+const animeSchema = createSchema({
     title:Type.string({require: true}), // pl. dragon ball
     description:Type.string({require: true}),
     imageLink:Type.string({require: true}),
@@ -23,7 +35,6 @@ const animeSchema = createSchema({
 export const AnimeModel = typedModel('anime', animeSchema);
 export type AnimeDoc = ExtractDoc<typeof animeSchema>;
 
-/*
    {
     "title": "Dragon Ball2",
     "description": "ez egy jo anime",
