@@ -54,6 +54,24 @@ export class EpisodeApiController {
         return JSON.parse(JSON.stringify(episode))
     }
 
+    @Get("/api/episode/anime/:id")
+    //@Authorized("user")
+    async getAnimeEpisodesById(@Param("id") id: string, @Res() res: any) {
+        const episode = await EpisodeModel.find(
+            {animeId: id}
+        );
+
+        //404
+        if (episode[0] == undefined) {
+            res.status(404);
+            return {
+                message: "Episode Not found"
+            }
+        }
+
+        return JSON.parse(JSON.stringify(episode))
+    }
+
     
     @Delete("/api/episode/:id")
     //@Authorized("admin")
@@ -99,6 +117,22 @@ export class EpisodeApiController {
         @Req() req: Request, @Res() res: any) {
             console.log(episode);
 
+        const episodeFound = await EpisodeModel.findOne({
+            animeId: episode.animeId,
+            season: episode.season,
+            part: episode.part
+        });
+
+        if(episodeFound?.links != undefined){
+            let newLinks = episode.links?.concat(episodeFound.links);
+            
+            const updateEpisodeLiks = await EpisodeModel.update({
+                $set: { _id: episodeFound._id}
+            },{links: newLinks});
+
+            return "links updated"
+        }
+
         const newAnime = new EpisodeModel(
             episode
         );
@@ -115,6 +149,12 @@ export class EpisodeApiController {
         return {
             message: "episode saved."
         };
+    }
+
+    concatLinks(episode: EpisodeDoc, episodeFound: EpisodeDoc){
+        if(episodeFound.links == undefined) return;
+
+        return episode.links?.concat(episodeFound.links);
     }
 
 }
