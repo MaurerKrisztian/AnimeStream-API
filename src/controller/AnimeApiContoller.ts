@@ -31,7 +31,7 @@ export class AnimeApiController {
 
     // TODO: anime term
     @Get("/api/anime")
-    //@Authorized("user")
+   // @Authorized("user")
     async getAnimes(@Req() req: any, @Res() res: any, @QueryParam('term') term: string) {
        
         let animes;
@@ -71,7 +71,7 @@ export class AnimeApiController {
 
     
     @Delete("/api/anime/:id")
-    //@Authorized("admin")
+    @Authorized("user")
     async deleteById(@Param("id") id: string, @Res() res: any) {
 
         const removedProfile = await AnimeModel.remove({
@@ -93,7 +93,7 @@ export class AnimeApiController {
     }
 
     @Patch("/api/anime/:id")
-    //@Authorized("admin")
+    //@Authorized("user")
     async update(@Body() body: any, @Param("id") id: string) {
 
         const res = await AnimeModel.update({

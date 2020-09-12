@@ -61,6 +61,7 @@ useExpressServer(app, {
         if (authorization == undefined) return false;
 
         const token = authorization.split(' ')[1];
+        
         if (token == undefined){
             action.response.status(401)
             return false
@@ -100,7 +101,6 @@ useExpressServer(app, {
     currentUserChecker: async (action: Action) => {
       
         const authorization = action.request.headers["authorization"];
-
         if (authorization == undefined) return undefined;
 
         const token = authorization.split(' ')[1];
