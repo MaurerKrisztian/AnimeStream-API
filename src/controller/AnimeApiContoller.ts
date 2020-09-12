@@ -9,7 +9,8 @@ import {
     Body,
     Res,
     Authorized,
-    Patch
+    Patch,
+    QueryParam
 } from "routing-controllers";
 
 import {AnimeDoc, AnimeModel} from "../db/models/anime"
@@ -28,20 +29,26 @@ export class AnimeApiController {
     }
    
 
+    // TODO: anime term
     @Get("/api/anime")
     //@Authorized("user")
-    async getAnimes(@Req() req: any, @Res() res: any) {
-        const profiles = await AnimeModel.find(req.query);
-
+    async getAnimes(@Req() req: any, @Res() res: any, @QueryParam('term') term: string) {
+       
+        let animes;
+       if(term != undefined){
+        animes = await AnimeModel.find({title: {$regex:  new RegExp(term, 'i' )}});
+       }else {
+        animes = await AnimeModel.find();
+       }
         //404
-        if (profiles[0] == undefined) {
+        if (animes[0] == undefined) {
             res.status(404);
             return {
-                message: "Profile Not found"
+                message: "Anime Not found"
             }
         }
 
-        return JSON.parse(JSON.stringify(profiles))
+        return JSON.parse(JSON.stringify(animes))
     }
 
     @Get("/api/anime/:id")
