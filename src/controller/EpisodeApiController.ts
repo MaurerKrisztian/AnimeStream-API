@@ -127,9 +127,10 @@ export class EpisodeApiController {
             let newLinks = episode.links?.concat(episodeFound.links);
             
             const updateEpisodeLiks = await EpisodeModel.update({
-                $set: { _id: episodeFound._id}
-            },{links: newLinks});
+                _id: episodeFound._id
+            },{ $set: {links: newLinks}});
 
+            console.log(updateEpisodeLiks)
             return "links updated"
         }
 
