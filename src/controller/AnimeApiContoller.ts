@@ -62,7 +62,7 @@ export class AnimeApiController {
         if (anime[0] == undefined) {
             res.status(404);
             return {
-                message: "Profile Not found"
+                message: "Anime Not found"
             }
         }
 
