@@ -68,6 +68,7 @@ export class LoginApiController {
     return {
       accessToken: accessToken,
       refreshToken: refreshToken,
+      roles: user.roles,
       userId: JSON.parse(JSON.stringify(user))._id,
       /*profileId: user.profileId,*/
     };
