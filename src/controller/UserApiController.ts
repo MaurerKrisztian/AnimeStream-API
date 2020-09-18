@@ -51,6 +51,23 @@ export class UserApiController {
         return JSON.parse(JSON.stringify(result))
     }
 
+    @Get('/api/user/:id')
+    //@Authorized("user")
+    async findOneUsers(@Param("id") id: string, @Req() req: Request, @Res() res: Response) {
+        const result = await UserModel.findOne({_id: id})
+
+        //404
+        if (result == undefined) {
+            res.status(404);
+            return {
+                message: "Not found"
+            }
+        }
+
+        return JSON.parse(JSON.stringify(result))
+    }
+
+
    /* @Get("/api/profile/:profileId/users")
     @Authorized("user")
     async getProfileUsers(@Param("profileId") profileId: string,
@@ -118,7 +135,8 @@ export class UserApiController {
 
         const result = await UserModel.remove({
                 _id: id
-            }).then((data: any) => {})
+            }).then((data: any) => {
+            })
             .catch((err: any) => {
                 res.status(400);
                 return err;
