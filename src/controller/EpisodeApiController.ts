@@ -13,7 +13,11 @@ import {
 } from "routing-controllers";
 
 import {EpisodeDoc, EpisodeModel} from "../db/models/episodes"
+import {AnimeDoc, AnimeModel} from "../db/models/anime"
+import {UserDoc, UserModel} from "../db/models/user"
+
 import { Request } from "express";
+import { User } from "../model/User";
 
 @Controller()
 export class EpisodeApiController {
@@ -130,7 +134,7 @@ export class EpisodeApiController {
                 _id: episodeFound._id
             },{ $set: {links: newLinks}});
 
-            console.log(updateEpisodeLiks)
+            //console.log(updateEpisodeLiks)
             return "links updated"
         }
 
@@ -138,6 +142,11 @@ export class EpisodeApiController {
             episode
         );
 
+        //sendd notification
+            //get episode anime
+                //get anime subscripers id 
+                    //send notif
+        this.notifyUsers(episode);
 
         const savedEpisode = await newAnime.save()
             .then((data: any) => {
@@ -150,6 +159,39 @@ export class EpisodeApiController {
         return {
             message: "episode saved."
         };
+    }
+
+    async notifyUsers(episode: EpisodeDoc){
+        const anime = await AnimeModel.findOne({_id: episode.animeId});
+        if(anime == undefined){
+            return undefined;
+        }
+
+        const subscribedUserIds = anime.subscribers; 
+    
+
+        subscribedUserIds?.forEach(async (subscriberId)=>{
+            console.log(subscriberId)
+            const res = await UserModel.update({
+                _id: subscriberId
+            }, {
+                $push: {
+                    notification: {
+                        message: 'new episode: <a href="/anime/'+anime._id+'">' + anime.title + " s: " + episode.season + " ep: "+ episode.part + "</a>",
+                        date: "123.123"
+                    }
+                }
+            });
+
+            console.log({
+                message: "new episode: " + anime.title + " s: " + episode.season + " ep: "+ episode.part,
+                date: "123.123"
+            })
+            
+        })
+
+
+
     }
 
     concatLinks(episode: EpisodeDoc, episodeFound: EpisodeDoc){

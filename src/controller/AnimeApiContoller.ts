@@ -27,8 +27,7 @@ export class AnimeApiController {
     @Get("/api/echo")
     //@Authorized("user")
     async hello(@Req() req: any, @Res() res: any) {
-     
-        return "echo"
+        return "hello "
     }
    
 
@@ -117,31 +116,30 @@ export class AnimeApiController {
         return JSON.stringify(res);
     }
 
-    @Patch("/api/anime/:id/like")
+    @Patch("/api/anime/:id/subscribe")
     //@Authorized("user")
-    async like(@Body() body: any, @Param("id") id: string, @CurrentUser({
+    async subscribers(@Body() body: any, @Param("id") id: string, @CurrentUser({
         required: true
     }) user: UserDoc) {
         console.log(user)
 
-        if(body.like){
+        if(body.subscribe){
             const res = await AnimeModel.update({
                 _id: id
             }, {
-                $addToSet: {likers: user._id}
+                $addToSet: {subscribers: user._id}
             });
-            return JSON.stringify({message: "liked"});
+            return JSON.stringify({message: "subscribed"});
         }else{
             const res = await AnimeModel.update({
                 _id: id
             }, {
-                $pull: {likers: user._id}
+                $pull: {subscribers: user._id}
             });
 
-            return JSON.stringify({message: "unliked"});
+            return JSON.stringify({message: "unsubscribed"});
         }
 
-        return JSON.stringify({message: "like"});
     }
 
 
