@@ -10,12 +10,15 @@ import {
     Res,
     Authorized,
     Patch,
-    QueryParam
+    QueryParam, CurrentUser
 } from "routing-controllers";
 
 import {AnimeDoc, AnimeModel} from "../db/models/anime"
 import { Request } from "express";
 import { EpisodeDoc, EpisodeModel } from "../db/models/episodes";
+import { User } from "../model/User";
+import { UserDoc } from "../db/models/user";
+import { Console } from "console";
 
 @Controller()
 export class AnimeApiController {
@@ -66,6 +69,15 @@ export class AnimeApiController {
             }
         }
 
+        //increment viewCount
+        const updateCount = await await AnimeModel.update({
+            _id: id
+        }, {
+            $inc: {viewCount: 1}
+        });
+
+        console.log( "count", anime[0].viewCount)
+
         return JSON.parse(JSON.stringify(anime))
     }
 
@@ -103,6 +115,33 @@ export class AnimeApiController {
         });
 
         return JSON.stringify(res);
+    }
+
+    @Patch("/api/anime/:id/like")
+    //@Authorized("user")
+    async like(@Body() body: any, @Param("id") id: string, @CurrentUser({
+        required: true
+    }) user: UserDoc) {
+        console.log(user)
+
+        if(body.like){
+            const res = await AnimeModel.update({
+                _id: id
+            }, {
+                $addToSet: {likers: user._id}
+            });
+            return JSON.stringify({message: "liked"});
+        }else{
+            const res = await AnimeModel.update({
+                _id: id
+            }, {
+                $pull: {likers: user._id}
+            });
+
+            return JSON.stringify({message: "unliked"});
+        }
+
+        return JSON.stringify({message: "like"});
     }
 
 

@@ -6,6 +6,8 @@ const animeSchema = createSchema({
         title: Type.string({ required: false }), //pl dragon ball super
         description:Type.string({require: true}),
         imageLink:Type.string({require: true}),
+        viewCount: Type.number(),
+        likers: Type.array().of(Type.string())
 })
 
 export const AnimeModel = typedModel('anime', animeSchema);
