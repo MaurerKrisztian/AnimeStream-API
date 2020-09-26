@@ -177,7 +177,8 @@ export class EpisodeApiController {
             }, {
                 $push: {
                     notification: {
-                        message: 'new episode: <a href="/anime/'+anime._id+'">' + anime.title + " s: " + episode.season + " ep: "+ episode.part + "</a>",
+                        message: 'new episode:' + anime.title + " s: " + episode.season + " ep: "+ episode.part + "</a>",
+                        link: '/anime/'+anime._id,
                         date: "123.123"
                     }
                 }

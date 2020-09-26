@@ -9,6 +9,7 @@ const userSchema = createSchema({
     roles: Type.array({default: ["user"]}).of(Type.string({ required: true })),
     notification:  Type.array().of({
         message: Type.string({require: false}),
+        link: Type.string({require: false}),
         date: Type.string({require: false})
     })
 })
