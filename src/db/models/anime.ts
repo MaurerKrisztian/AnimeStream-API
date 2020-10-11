@@ -3,7 +3,7 @@ export {};
 import {createSchema, ExtractDoc, Type, typedModel} from 'ts-mongoose';
 
 const animeSchema = createSchema({
-        title: Type.string({ required: false }), //pl dragon ball super
+        title: Type.string({ required: false }),
         description:Type.string({require: true}),
         imageLink:Type.string({require: true}),
         viewCount: Type.number(),

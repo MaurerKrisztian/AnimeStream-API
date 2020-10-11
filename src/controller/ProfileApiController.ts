@@ -11,9 +11,6 @@ import {
     Authorized,
     Patch
 } from "routing-controllers";
-import {
-    Profile
-} from "../model/Profile";
 
 
 import {ProfileModel, ProfileDoc} from "../db/models/profile"

@@ -24,6 +24,7 @@ import { AnimeApiController } from "./src/controller/AnimeApiContoller";
 import { OtherApiController } from "./src/controller/OtherAnimeApiController";
 import { EpisodeModel } from "./src/db/models/episodes";
 import { EpisodeApiController } from "./src/controller/EpisodeApiController";
+import { Console } from "console";
 const jwt = require('jsonwebtoken')
 require('dotenv/config')
 
@@ -32,7 +33,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const app = express();
-const DB_URI = process.env.DB_CONNECTION;
+const DB_URI = process.env.DB_URI;
 const PORT = process.env.PORT || config.get("App.server.port");
 
 app.use(cookieParser());
@@ -42,16 +43,17 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
+
+if(DB_URI  != undefined) {
+    
 //mongodb connection
-    mongoose.connect("mongodb+srv://test:test@cluster0.hs7yw.mongodb.net/Cluster0?retryWrites=true&w=majority", {
+    mongoose.connect(DB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true
     }, () => {
         console.log("connected to DB")
-    }).catch((err) => {
-        console.log("cant connect to db")
-    });
-
+    })
+}
 
 useExpressServer(app, {
     authorizationChecker: async (action: Action, roles: string[]) => {

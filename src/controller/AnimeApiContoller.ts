@@ -26,10 +26,10 @@ import { model } from "mongoose";
 export class AnimeApiController {
 
     
-    @Get("/api/echo")
+    @Get("/")
     //@Authorized("user")
     async hello(@Req() req: any, @Res() res: any) {
-        return "hello "
+        return "Api is working!"
     }
    
 

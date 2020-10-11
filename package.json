@@ -5,7 +5,12 @@
   "main": "app.ts",
   "scripts": {
     "start": "ts-node-dev app.ts",
+    "dockerize": "docker login  && docker build -t anime-api-docker .  && docker run -it -p 3000:3000 anime-api-docker",
     "test": "mocha"
+  },
+  "config": {
+    "internalPort": "3000",
+    "externalPort": "3000"
   },
   "author": "",
   "license": "ISC",

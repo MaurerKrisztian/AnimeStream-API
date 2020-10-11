@@ -12,4 +12,3 @@ const ProfileSchema = createSchema({
 
 export const ProfileModel = typedModel('Profile', ProfileSchema);
 export type ProfileDoc = ExtractDoc<typeof ProfileSchema>;
-
