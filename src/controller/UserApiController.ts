@@ -28,6 +28,7 @@ import {
 import {UserModel} from '../db/models/user';
 import {ProfileModel} from "../db/models/profile";
 import {DIprovider} from "../DI/DIprovider";
+import {MyLogger} from "../services/Logger";
 
 
 @Controller()
@@ -93,8 +94,6 @@ export class UserApiController {
         }) user: any,
         @Req() req: Request, @Res() res: any) {
 
-            console.log("create new user")
-
         const userTest = null ;//= await UserModel.findOne({email: user.email})
 
         if(userTest != null){
@@ -106,7 +105,6 @@ export class UserApiController {
 
         const hashPassword = await BcryptAndDecrypt.bcryptPassword(user.password);
 
-        console.log("upload", user, hashPassword)
         const newUser = new UserModel({
             email: user.email,
             password: hashPassword,
@@ -118,7 +116,7 @@ export class UserApiController {
 
         const savedUser = await newUser.save()
             .then((data: any) => {
-                console.log("USER SAVED")
+                MyLogger.trace("USER SAVED")
             })
             .catch((err: any) => {
                 return err;
@@ -164,7 +162,7 @@ export class UserApiController {
                 return "user updated"
             })
             .catch((err: any) => {
-                console.log(err)
+                MyLogger.error(err)
                 res.status(404);
                 return err;
             });

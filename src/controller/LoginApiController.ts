@@ -16,6 +16,7 @@ import {
 import {UserModel} from '../db/models/user';
 import {ProfileModel} from "../db/models/profile";
 import {DIprovider} from "../DI/DIprovider";
+import {MyLogger} from "../services/Logger";
 const jwt = require("jsonwebtoken");
 
 @Controller()
@@ -90,7 +91,7 @@ export class LoginApiController {
     try {
       userId = await this.vereifyRefreshToken(refreshToken)
     } catch (err) {
-      console.log(err);
+      MyLogger.error(err);
       return {
         message: "Token is invalid"
       }

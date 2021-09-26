@@ -14,39 +14,35 @@ import {
 } from "routing-controllers";
 
 import {AnimeDoc, AnimeModel} from "../db/models/anime"
-import { Request } from "express";
-import { EpisodeDoc, EpisodeModel } from "../db/models/episodes";
-import { User } from "../model/User";
-import { UserDoc } from "../db/models/user";
-import { Console } from "console";
-import c from "config";
-import { model } from "mongoose";
+import {Request} from "express";
+import {UserDoc} from "../db/models/user";
+import {MyLogger} from "../services/Logger";
 
 @Controller()
 export class AnimeApiController {
 
-    
+
     @Get("/")
     //@Authorized("user")
     async hello(@Req() req: any, @Res() res: any) {
         return "Api is working!"
     }
-   
+
 
     // TODO: anime term
     @Get("/api/anime")
-   // @Authorized("user")
-    async getAnimes(@Req() req: any, @Res() res: any, @QueryParam('term') term: string, @QueryParam('limit') limit: number,@QueryParam('page') page: number ) {
-        const startIndex = (page -1) * limit;
+    // @Authorized("user")
+    async getAnimes(@Req() req: any, @Res() res: any, @QueryParam('term') term: string, @QueryParam('limit') limit: number, @QueryParam('page') page: number) {
+        const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 
-        console.log((await AnimeModel.collection.stats()).count)
+        MyLogger.info("" + (await AnimeModel.collection.stats()).count)
         let animes;
-       if(term != undefined){
-        animes = await AnimeModel.find({title: {$regex:  new RegExp(term, 'i' )}}).limit(limit).skip(startIndex).exec();
-       }else {
-        animes = await AnimeModel.find().limit(2);
-       }
+        if (term != undefined) {
+            animes = await AnimeModel.find({title: {$regex: new RegExp(term, 'i')}}).limit(limit).skip(startIndex).exec();
+        } else {
+            animes = await AnimeModel.find().limit(2);
+        }
         //404
         if (animes[0] == undefined) {
             res.status(404);
@@ -62,7 +58,7 @@ export class AnimeApiController {
             meta: {
                 collectionSize: collectionSize
             }
-        
+
         }
     }
 
@@ -88,12 +84,12 @@ export class AnimeApiController {
             $inc: {viewCount: 1}
         });
 
-        console.log( "count", anime[0].viewCount)
+        MyLogger.info("count" + anime[0].viewCount)
 
         return JSON.parse(JSON.stringify(anime))
     }
 
-    
+
     @Delete("/api/anime/:id")
     @Authorized("user")
     async deleteById(@Param("id") id: string, @Res() res: any) {
@@ -134,16 +130,16 @@ export class AnimeApiController {
     async subscribers(@Body() body: any, @Param("id") id: string, @CurrentUser({
         required: true
     }) user: UserDoc) {
-        console.log(user)
+        MyLogger.info(MyLogger.prettyJsonString(user))
 
-        if(body.subscribe){
+        if (body.subscribe) {
             const res = await AnimeModel.update({
                 _id: id
             }, {
                 $addToSet: {subscribers: user._id}
             });
             return JSON.stringify({message: "subscribed"});
-        }else{
+        } else {
             const res = await AnimeModel.update({
                 _id: id
             }, {
@@ -159,10 +155,9 @@ export class AnimeApiController {
     @Post('/api/anime')
     //@Authorized("admin")
     async createAnime(@Body({
-            validate: true
-        }) anime: AnimeDoc,
-        @Req() req: Request, @Res() res: any) {
-            console.log(anime);
+                          validate: true
+                      }) anime: AnimeDoc,
+                      @Req() req: Request, @Res() res: any) {
 
         const newAnime = new AnimeModel(
             anime

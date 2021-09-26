@@ -1,17 +1,17 @@
 import {Injectable} from "injection-js";
-import {IFixture} from "./IFixture";
-import {ProfileModel} from "../db/models/profile";
-import {UserModel} from "../db/models/user";
-import {BcryptAndDecrypt} from "../model/BcryptAndDecrypt";
-import {MyLogger} from "../services/Logger";
+import {IServerSetup} from "./IServerSetup";
+import {Express} from "express";
+import {ProfileModel} from "../../db/models/profile";
+import {MyLogger} from "../../services/Logger";
+import {UserModel} from "../../db/models/user";
+import {BcryptAndDecrypt} from "../../model/BcryptAndDecrypt";
 
 const config = require('config')
 
 @Injectable()
-export class AdminFixture implements IFixture {
+export class AdminLoaderSetup implements IServerSetup {
 
-    async load() {
-
+    async setup(app: Express) {
         // create admin profile
         const adminUserProfile = config.get('Admin.profile')
 

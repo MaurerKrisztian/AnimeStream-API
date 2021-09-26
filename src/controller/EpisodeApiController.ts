@@ -18,6 +18,7 @@ import {UserDoc, UserModel} from "../db/models/user"
 
 import { Request } from "express";
 import { User } from "../model/User";
+import {MyLogger} from "../services/Logger";
 
 @Controller()
 export class EpisodeApiController {
@@ -119,7 +120,6 @@ export class EpisodeApiController {
             validate: true
         }) episode: EpisodeDoc,
         @Req() req: Request, @Res() res: any) {
-            console.log(episode);
 
         const episodeFound = await EpisodeModel.findOne({
             animeId: episode.animeId,
@@ -134,7 +134,6 @@ export class EpisodeApiController {
                 _id: episodeFound._id
             },{ $set: {links: newLinks}});
 
-            //console.log(updateEpisodeLiks)
             return "links updated"
         }
 
@@ -171,7 +170,6 @@ export class EpisodeApiController {
     
 
         subscribedUserIds?.forEach(async (subscriberId)=>{
-            console.log(subscriberId)
             const res = await UserModel.update({
                 _id: subscriberId
             }, {
@@ -184,10 +182,10 @@ export class EpisodeApiController {
                 }
             });
 
-            console.log({
+            MyLogger.trace(MyLogger.prettyJsonString({
                 message: "new episode: " + anime.title + " s: " + episode.season + " ep: "+ episode.part,
                 date: "123.123"
-            })
+            }))
             
         })
 
